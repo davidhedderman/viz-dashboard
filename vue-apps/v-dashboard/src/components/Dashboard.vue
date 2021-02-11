@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <h1>{{ header }}</h1>
-  </div>
+  <b-container class="bv-example-row" fluid="md">
+    <b-row>
+      <b-col offset-md="3">{{ header }}</b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>

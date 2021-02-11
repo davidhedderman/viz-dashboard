@@ -13,13 +13,17 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  position: absolute;
+  top: 50px; /*the navbar height*/
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-family: PoppinsRegular, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
