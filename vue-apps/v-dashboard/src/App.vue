@@ -1,14 +1,19 @@
 <template>
-  <Dashboard header="Dashboard to be implemented"/>
+  <div id="app">
+    <Header site_title="Viz dashboard"/>
+    <MainDashboard/>
+  </div>
 </template>
 
 <script>
-import Dashboard from './components/Dashboard.vue'
+import MainDashboard from './components/MainDashboard.vue';
+import Header from './components/Header.vue';
 
 export default {
   name: 'App',
   components: {
-    Dashboard
+    MainDashboard,
+    Header,
   }
 }
 </script>
@@ -16,7 +21,7 @@ export default {
 <style lang="scss" scoped>
 #app {
   position: absolute;
-  top: 50px; /*the navbar height*/
+  top: 0;
   bottom: 0;
   left: 0;
   right: 0;
