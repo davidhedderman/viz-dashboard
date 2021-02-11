@@ -1,0 +1,9 @@
+{% extends 'base_site.html' %}
+
+{% load render_bundle from webpack_loader %}
+
+{% block content %}
+  <div id="app"></div>
+  {% render_bundle 'chunk-vendors' %}
+  {% render_bundle 'app' %}
+{% endblock %}

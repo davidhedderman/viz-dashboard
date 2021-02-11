@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from apps.dashboard.views import index as homepage
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('viz_admin/', admin.site.urls),
+    path('', homepage, name='index'),
 ]

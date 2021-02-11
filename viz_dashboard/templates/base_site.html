@@ -1,0 +1,16 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{% block title %} Viz Dashboard{% endblock title %}</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Viz Dashboard">
+  <meta name="author" content="David Hedderman">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <div>
+    {% block content %}{% endblock content %}
+  </div>
+</body>
+</html>
