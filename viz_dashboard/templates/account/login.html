@@ -1,0 +1,79 @@
+{% extends "account/base.html" %}
+
+{% load i18n widget_tweaks %}
+
+{% block title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+
+{% load static compress %}
+<div class="account-parent d-flex justify-content-center">
+  <div class="account-responsive-wrapper login mb-5">
+    <h2 class="account-title text-center mt-5">Log in/Register</h2>
+    <p class="account-blurb p-4 p-md-0 my-5">
+      Login below to complete your purchase. Once your purchase has been finalised we will generate your dataset (which may take between 10-20 minutes). Your data will then be available to download from your dashboard.
+    </p>
+    <div class="account-gray-wrapper px-4 py-4 px-md-0 py-md-5">
+      <div class="row account-login p-0 m-0">
+        <div class="col-12 col-md-6 px-2 pb-3 mb-3 pb-md-0 mb-md-0 px-md-5">
+          <h4 class="account-subtitle mb-3">{% trans "Login" %}</h4>
+          <div>
+            <form method="POST" action="{% url 'account_login' %}" autocomplete="off">
+              {% csrf_token %}
+              {% if form.non_field_errors %}
+              <div class="errorlist nonfield">
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+              </div>
+              {% endif %}
+
+              <div>
+              {% for field in form.visible_fields %}
+                {% if field.label != 'Remember Me'%}
+                <div>
+                  <div class="account-input-label">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                  </div>
+                  <div class="account-input mb-3">
+                    {{ field|add_class:'form-control'|attr:"autocomplete:off" }}
+                  </div>
+                </div>
+                {% else %}
+                <div class="text-right">
+                  <label class="account-remember-me" for="{{ field.id_for_label }}">REMEMBER ME</label>
+                  {{ field }}
+                </div>
+                {% endif %}
+                {% for error in field.errors %}
+                  <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+              {% endfor %}
+              </div>
+
+              {% if redirect_field_value %}
+              <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+              {% endif %}
+              <div class="text-center">
+                <button type="submit" class="btn-clear btn-orange-gd--primary">{% trans "Log in" %}</button>
+              </div>
+              <div class="text-center mt-2">
+                <a class="account-link" href="{% url 'account_reset_password' %}">{% trans "Forgotten your password?" %}</a>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 px-2 px-md-5">
+          <h4 class="account-subtitle mb-3">{% trans "Register" %}</h4>
+          <p class="account-blurb">Don't have an account? Register now.</p>
+          <a href="{% url 'account_signup' %}">
+            <button class="btn-clear btn-orange-gd--primary my-3">
+              Register
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

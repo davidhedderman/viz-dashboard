@@ -1,0 +1,33 @@
+{% extends "account/base.html" %}
+
+{% load i18n static %}
+
+{% block head_title %}{% trans "Sign Out" %}{% endblock %}
+
+{% block content %}
+
+<div class="account-parent d-flex justify-content-center">
+  <div class="account-responsive-wrapper password login mb-5">
+    <h2 class="account-title text-center my-5">{% trans "Sign Out" %}</h2>
+    <div class="account-gray-wrapper p-4 px-md-0 py-md-3">
+      <div class=" account-login p-0 p-md-5 m-0">
+        <p class="account-blurb">{% trans 'Are you sure you want to sign out?' %}</p>
+        <form id="signOutForm" method="post" action="{% url 'account_logout' %}" autocomplete="off">
+          {% csrf_token %}
+          {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+          {% endif %}
+          <div class="text-right">
+            <a href="/" class="btn btn-clear btn-link btn-orange-gd--secondary mr-1">
+              {% trans 'Back' %}
+            </a>
+            <button class="w-25 btn-clear btn-orange-gd--primary ml-1" type="submit" form="signOutForm">
+              {% trans 'Sign Out' %}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

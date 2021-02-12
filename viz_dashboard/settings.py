@@ -9,10 +9,16 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+import ldap
 import os
-from pathlib import Path
 
 from dotenv import load_dotenv
+from pathlib import Path
+
+from django_auth_ldap.config import (
+    GroupOfNamesType,
+    LDAPSearch,
+)
 
 # load environment variables
 load_dotenv()
@@ -37,7 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # other apps
+    'compressor',
+    'django.contrib.sites',
     'webpack_loader',
+    'widget_tweaks',
+    # auth stuff
+    'allauth',
+    'allauth.account',
     # custom django apps
     'apps.dashboard',
     'apps.charts',
@@ -86,6 +98,45 @@ DATABASES = {
     }
 }
 
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+ACCOUNT_ADAPTER = 'apps.users.adapter.UsersAdapter'  # To handle what happens after the login
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = True
+
+# LDAP config
+AUTH_LDAP_SERVER_URI = os.environ.get(
+    'AUTH_LDAP_SERVER_URI',
+    'ldap://example.com',
+)
+AUTH_LDAP_USER_SEARCH = LDAPSearch(
+    os.environ.get('AUTH_LDAP_BASE_DN', default='ou=people,dc=example,dc=com'),
+    ldap.SCOPE_SUBTREE,
+    os.environ.get('AUTH_LDAP_FILTERSTR', default='(&(objectClass=posixAccount)(uid=%(user)s))'),
+)
+AUTH_LDAP_USER_ATTR_MAP = {
+    "username": "uid",
+    "email": "mail",
+}
+# AUTH_LDAP_USER_FLAGS_BY_GROUP = {  # TODO
+#     'is_staff': 'cn=djangoadmins,dc=example,dc=com',
+#     'is_superuser': 'cn=djangoadmins,dc=example,dc=com',
+# }
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
+    os.environ.get(
+        'AUTH_LDAP_GROUP_BASE_DN',
+        default="ou=groups,dc=example,dc=com",
+    ),
+    ldap.SCOPE_SUBTREE,
+    os.environ.get('AUTH_LDAP_GROUP_FILTERSTR', default="(objectClass=posixGroup)")
+)
+AUTH_LDAP_GROUP_TYPE = GroupOfNamesType()
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -130,6 +181,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+STATIC_ROOT = BASE_DIR / 'static'
 
 WEBPACK_LOADER = {
     'DEFAULT': {
